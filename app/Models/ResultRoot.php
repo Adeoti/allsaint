@@ -19,6 +19,9 @@ class ResultRoot extends Model
         'grading_system_id',
         'next_term',
         'section_address',
+        'logo',
+        'teacher_id',
+
     ];
 
 
@@ -32,6 +35,11 @@ class ResultRoot extends Model
     public function resultUploads()
     {
         return $this->hasMany(ResultUpload::class, 'result_root_id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
     }
 
 
