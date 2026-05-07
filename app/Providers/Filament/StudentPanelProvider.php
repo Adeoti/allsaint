@@ -30,6 +30,7 @@ class StudentPanelProvider extends PanelProvider
             ->brandName($schoolDetails['school_name'])
             ->sidebarCollapsibleOnDesktop()
             ->login()
+            ->darkMode(false)
 
             ->colors([
                 'primary' => Color::Purple,
