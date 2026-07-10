@@ -4,10 +4,12 @@ use App\Models\SchoolClass;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomeworkController;
-use App\Http\Controllers\ReportCardController;
 use App\Http\Controllers\ReportCardPdfController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ResultUploadController;
+use App\Http\Controllers\ReportCardController;
+use App\Http\Controllers\CumulativeReportController;
+use App\Http\Controllers\StudentCumulativeReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -21,6 +23,28 @@ use App\Http\Controllers\ResultUploadController;
 
 
 Route::middleware(['auth'])->group(function () {
+    // CUMULATIVE REPORT ROUTES
+    // ----- Teacher: cumulative report for a whole class -----
+    Route::get('/cumulative-reports/select', [CumulativeReportController::class, 'select'])
+        ->name('cumulative-reports.select');
+
+    Route::get('/cumulative-reports/go', [CumulativeReportController::class, 'go'])
+        ->name('cumulative-reports.go');
+
+    Route::get('/cumulative-reports/show', [CumulativeReportController::class, 'show'])
+        ->name('cumulative-reports.show');
+
+    // ----- Student: cumulative report for themselves only -----
+    Route::get('/my-cumulative-report/select', [StudentCumulativeReportController::class, 'select'])
+        ->name('student.cumulative-reports.select');
+
+    Route::get('/my-cumulative-report/go', [StudentCumulativeReportController::class, 'go'])
+        ->name('student.cumulative-reports.go');
+
+    Route::get('/my-cumulative-report/show', [StudentCumulativeReportController::class, 'show'])
+        ->name('student.cumulative-reports.show');
+
+
     // BROADSHEET ROUTES
     Route::get(
         '/admin/broadsheets/{record}/view',
@@ -55,9 +79,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/teacher-remark/{studentId}/{resultRootId}', [\App\Http\Controllers\TeacherRemarkController::class, 'getRemark'])
         ->name('teacher-remark.get');
 
-    Route::get('/report-cards/{record}', [ReportCardController::class, 'show'])
-        ->name('report-cards.show');
-
     // HOS remarks routes
     Route::post('/hos-remark/save', [\App\Http\Controllers\HOSRemarkController::class, 'store'])
         ->name('hos-remark.save');
@@ -65,6 +86,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hos-remark/{studentId}/{resultRootId}', [\App\Http\Controllers\HOSRemarkController::class, 'getRemark'])
         ->name('hos-remark.get');
 });
+
+Route::get('/report-cards/{record}', [ReportCardController::class, 'show'])
+    ->name('report-cards.show');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // In routes/web.php

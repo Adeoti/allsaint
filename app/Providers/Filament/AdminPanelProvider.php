@@ -3,11 +3,13 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\AdminCustomDashboard;
+use App\Filament\Resources\BroadsheetResource\Pages\ViewBroadsheet;
 use App\Models\Setting;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -33,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->darkMode(false)
             ->path('admin')
             ->login()
             ->sidebarCollapsibleOnDesktop()
@@ -43,18 +46,26 @@ class AdminPanelProvider extends PanelProvider
                 'purple' => Color::Purple,
             ])
             ->defaultThemeMode(ThemeMode::Light)
-            ->darkMode(false)
             ->brandName($schoolDetails['school_name'])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 //Pages\Dashboard::class,
-                AdminCustomDashboard::class
+                AdminCustomDashboard::class,
+                // ViewBroadsheet::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Cummulative Reports')
+                    ->icon('heroicon-o-document-text')
+                    ->group('Examinations')
+                    ->url(fn() => route('cumulative-reports.select'))  
+                    ->sort(1)
+                    ->isActiveWhen(fn(): bool => request()->routeIs('cumulative-reports.select')),
             ])
             ->middleware([
                 EncryptCookies::class,
