@@ -70,6 +70,25 @@ class ResultRootResource extends Resource
                         Forms\Components\Textarea::make('description')
                             ->required()
                             ->columnSpanFull(),
+
+
+                        Select::make('term')
+                            ->label('Term')
+                            ->options(ResultRoot::termOptions())
+                            ->required()
+                            ->native(false)
+                            ->searchable(false),
+
+                        Select::make('academic_session')
+                            ->label('Academic Session')
+                            ->options(ResultRoot::academicSessionOptions())
+                            ->required()
+                            ->native(false)
+                            ->searchable()
+                            ->default(function () {
+                                $year = now()->month >= 9 ? now()->year : now()->year - 1;
+                                return $year . '/' . ($year + 1);
+                            }),
                         Select::make('branch_ids')
                             ->label('Branches')
                             ->required()
@@ -108,9 +127,9 @@ class ResultRootResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        // Order by created_at descending by default
+            // Order by created_at descending by default
             ->defaultSort('created_at', 'desc')
-            
+
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->description(function (ResultRoot $record) {
@@ -129,6 +148,15 @@ class ResultRootResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('term')
+                    ->label('Term')
+                    ->sortable()
+                    ->searchable(),
+
+                TextColumn::make('academic_session')
+                    ->label('Session')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
