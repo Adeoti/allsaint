@@ -110,11 +110,19 @@ class ResultRootResource extends Resource
                             ->description('Create exam scrore columns to use for result calculation')
                             ->schema([
                                 Repeater::make('exam_score_columns')
-                                    ->label('exam score columns')
+                                    ->label('Exam Score Columns')
                                     ->schema([
-                                        TextInput::make('label')->label('Column Label')->placeholder('E.g. 1st CA')->required(),
-                                        TextInput::make('overall_score')->label('Overall Score')->numeric()->placeholder('E.g. 100')->required(),
-
+                                        TextInput::make('label')
+                                            ->label('Column Label')
+                                            ->placeholder('E.g. 1st CA')
+                                            ->required(),
+                                        TextInput::make('overall_score')
+                                            ->label('Overall Score')
+                                            ->numeric()
+                                            ->placeholder('E.g. 100')
+                                            ->required()
+                                            ->formatStateUsing(fn($state) => preg_replace('/[^0-9.]/', '', $state))
+                                            ->mutateDehydratedStateUsing(fn($state) => preg_replace('/[^0-9.]/', '', $state)),
                                     ])
                                     ->columns(2)
                                     ->columnSpanFull(),
