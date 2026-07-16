@@ -11,6 +11,7 @@ use App\Http\Controllers\ReportCardController;
 use App\Http\Controllers\CumulativeReportController;
 use App\Http\Controllers\StudentCumulativeReportController;
 use App\Http\Controllers\SubjectRankingController;
+use App\Http\Controllers\OverallRankingController;
 
 
 // Route::get('/', function () {
@@ -95,6 +96,22 @@ Route::middleware(['auth'])->group(function () {
         ->name('hos-remark.get');
 });
 
+
+
+Route::get('/overall-ranking/select', [OverallRankingController::class, 'select'])
+    ->name('overall-ranking.select');
+
+Route::get('/overall-ranking/classes', [OverallRankingController::class, 'getClasses'])
+    ->name('overall-ranking.classes');
+
+Route::get('/overall-ranking/show', [OverallRankingController::class, 'show'])
+    ->name('overall-ranking.show');
+
+Route::get('/overall-ranking/download-pdf', [OverallRankingController::class, 'downloadPdf'])
+    ->name('overall-ranking.download.pdf');
+
+Route::get('/overall-ranking/download-csv', [OverallRankingController::class, 'downloadCsv'])
+    ->name('overall-ranking.download.csv');
 
 Route::get('/subject-ranking/select', [SubjectRankingController::class, 'select'])
     ->name('subject-ranking.select');
