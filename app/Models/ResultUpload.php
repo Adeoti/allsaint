@@ -95,32 +95,24 @@ class ResultUpload extends Model
 
             // Process each row in the CSV
             while (($data = fgetcsv($handle)) !== false) {
-                // Map the data to headers
                 $row = array_combine($headers, $data);
-
-                // Extract Student ID
                 $studentId = $row['Student_ID'];
-                unset($row['Student_ID']); // Remove Student_ID from the score columns
+                unset($row['Student_ID']);
 
-                // Calculate total score
                 $totalScore = array_sum(array_map('intval', $row));
-
-                // Store total score for average, highest, and lowest calculations
                 $totalScores[$studentId] = $totalScore;
 
-                // Determine the grade and remark based on the total score
                 $gradingInfo = $this->getGradeFromScore($totalScore, $gradingSystem);
 
-                // Structure the student data with the new columns
                 $processedData[$studentId] = [
                     'scores' => $row,
                     'total' => $totalScore,
                     'grade' => $gradingInfo['grade'],
                     'remark' => $gradingInfo['remark'],
-                    'average' => '', // Placeholder for average score
-                    'highest' => '', // Placeholder for highest score
-                    'lowest' => '',  // Placeholder for lowest score
-                    'position' => '', // Placeholder for position
+                    'average' => count($row) > 0 ? round($totalScore / count($row), 2) : 0,  // per-student now
+                    'highest' => '',
+                    'lowest' => '',
+                    'position' => '',
                 ];
             }
             fclose($handle);
@@ -159,10 +151,8 @@ class ResultUpload extends Model
 
         // Set the highest, lowest, and average values in the processed data
         foreach ($processedData as $studentId => &$studentData) {
-            $studentData['average'] = $averageScore;
             $studentData['highest'] = $processedData[$highestScoreStudent]['total'];
             $studentData['lowest'] = $processedData[$lowestScoreStudent]['total'];
-
             $studentData['position'] = $this->getPositionSuffix($positionMapping[$studentId]);
         }
 

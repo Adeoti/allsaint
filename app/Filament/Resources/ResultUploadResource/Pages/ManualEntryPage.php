@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 class ManualEntryPage extends Page
 {
     protected static string $view = 'filament.resources.result-upload-resource.pages.manual-entry';
-    
+
     public $resultRootId;
     public $classId;
     public $subjectId;
@@ -32,11 +32,11 @@ class ManualEntryPage extends Page
         $this->resultRootList = ResultRoot::orderBy('created_at', 'desc')->get();
         $this->classList = SchoolClass::all();
         $this->subjectList = Subject::all();
-        
+
         $this->resultRootId = $request->get('result_root_id');
         $this->classId = $request->get('class_id');
         $this->subjectId = $request->get('subject_id');
-        
+
         if ($this->resultRootId && $this->classId && $this->subjectId) {
             $this->loadData();
         }
@@ -49,11 +49,11 @@ class ManualEntryPage extends Page
             $this->students = User::whereHas('student', function ($query) {
                 $query->where('student_class', $this->classId);
             })->with('student')->get();
-            
+
             // Get result root and exam columns
             $resultRoot = ResultRoot::find($this->resultRootId);
             $this->examColumns = $resultRoot->exam_score_columns ?? [];
-            
+
             // Get existing manual entry
             $existingEntry = ResultUpload::where('result_root_id', $this->resultRootId)
                 ->where('class_id', $this->classId)
@@ -69,7 +69,7 @@ class ManualEntryPage extends Page
                 'existing_entry_found' => $existingEntry ? true : false,
                 'processed_by' => Auth::id(),
             ]);
-            
+
             $this->existingData = $existingEntry ? json_decode($existingEntry->card_items, true) : [];
         }
     }
@@ -86,51 +86,51 @@ class ManualEntryPage extends Page
 
         try {
             DB::beginTransaction();
-            
+
             $resultRoot = ResultRoot::find($validated['result_root_id']);
             $examColumns = $resultRoot->exam_score_columns ?? [];
             $gradingSystem = $resultRoot->gradingSystem;
             $gradingRules = $gradingSystem ? $gradingSystem->grading_system : [];
-            
+
             $processedData = [];
             $totalScores = [];
-            
+
             // Process each student's scores
             foreach ($validated['scores'] as $studentId => $studentScores) {
                 $scoresArray = [];
                 $totalScore = 0;
-                
+
                 foreach ($examColumns as $column) {
                     $label = $column['label'];
                     $maxScore = (int) $column['overall_score'];
-                    
+
                     // Create the CSV format key: "3rd CA - 20"
                     $csvKey = $label . ' - ' . $maxScore;
-                    
+
                     // First check if score exists with CSV format key
                     if (isset($studentScores[$csvKey])) {
                         $score = (float) $studentScores[$csvKey];
-                    } 
+                    }
                     // Fallback to old format (just label) for backward compatibility
                     elseif (isset($studentScores[$label])) {
                         $score = (float) $studentScores[$label];
                     } else {
                         $score = 0;
                     }
-                    
+
                     // Validate score doesn't exceed max
                     $score = min($score, $maxScore);
                     $score = max($score, 0);
-                    
+
                     // Store using CSV format key: "3rd CA - 20"
                     $scoresArray[$csvKey] = (string) $score;
                     $totalScore += $score;
                 }
-                
+
                 // Determine grade and remark
                 $grade = 'F';
                 $remark = 'Failed';
-                
+
                 foreach ($gradingRules as $rule) {
                     if ($totalScore >= $rule['min_score'] && $totalScore <= $rule['max_score']) {
                         $grade = $rule['grade'];
@@ -138,24 +138,24 @@ class ManualEntryPage extends Page
                         break;
                     }
                 }
-                
+
                 $processedData[$studentId] = [
-                    'scores' => $scoresArray, // This now has keys like "3rd CA - 20"
+                    'scores' => $scoresArray,
                     'total' => $totalScore,
                     'grade' => $grade,
                     'remark' => $remark,
-                    'average' => '',
+                    'average' => count($examColumns) > 0 ? round($totalScore / count($examColumns), 2) : 0,  // per-student now
                     'highest' => '',
                     'lowest' => '',
                     'position' => '',
                 ];
-                
+
                 $totalScores[$studentId] = $totalScore;
             }
-            
+
             // Calculate statistics
             $this->calculateStatistics($processedData, $totalScores);
-            
+
             // Create or update the manual entry
             ResultUpload::updateOrCreate(
                 [
@@ -171,7 +171,7 @@ class ManualEntryPage extends Page
                     'updated_by' => Auth::id(),
                 ]
             );
-            
+
             DB::commit();
 
             // Log the result
@@ -182,9 +182,8 @@ class ManualEntryPage extends Page
                 'scores' => $validated['scores'],
                 'processed_by' => Auth::id(),
             ]);
-            
-           return redirect()->back()->with('success', 'Manual entry saved successfully!');
-            
+
+            return redirect()->back()->with('success', 'Manual entry saved successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error saving manual entry', [
@@ -199,23 +198,21 @@ class ManualEntryPage extends Page
                 ->with('error', 'Error saving manual entry: ' . $e->getMessage());
         }
     }
-    
+
     private function calculateStatistics(&$processedData, $totalScores): void
     {
         if (empty($processedData)) {
             return;
         }
-        
-        $average = count($totalScores) > 0 ? array_sum($totalScores) / count($totalScores) : 0;
+
         $highest = count($totalScores) > 0 ? max($totalScores) : 0;
         $lowest = count($totalScores) > 0 ? min($totalScores) : 0;
-        
-        // Sort for positions
+
         arsort($totalScores);
         $position = 1;
         $previousScore = null;
         $positionMapping = [];
-        
+
         foreach ($totalScores as $studentId => $score) {
             if ($score !== $previousScore) {
                 $positionMapping[$studentId] = $position;
@@ -225,26 +222,31 @@ class ManualEntryPage extends Page
             $previousScore = $score;
             $position++;
         }
-        
-        // Update all students
+
         foreach ($processedData as $studentId => &$studentData) {
-            $studentData['average'] = round($average, 2);
+            // 'average' already set per-student above — don't overwrite it here
             $studentData['highest'] = $highest;
             $studentData['lowest'] = $lowest;
             $studentData['position'] = $this->getPositionSuffix($positionMapping[$studentId] ?? 0);
         }
     }
-    
+
     private function getPositionSuffix($position): string
     {
         if ($position == 0) return 'N/A';
-        
+
         $suffix = 'th';
         if (!in_array(($position % 100), [11, 12, 13])) {
             switch ($position % 10) {
-                case 1: $suffix = 'st'; break;
-                case 2: $suffix = 'nd'; break;
-                case 3: $suffix = 'rd'; break;
+                case 1:
+                    $suffix = 'st';
+                    break;
+                case 2:
+                    $suffix = 'nd';
+                    break;
+                case 3:
+                    $suffix = 'rd';
+                    break;
             }
         }
         return $position . $suffix;

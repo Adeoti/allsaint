@@ -10,6 +10,8 @@ use App\Http\Controllers\ResultUploadController;
 use App\Http\Controllers\ReportCardController;
 use App\Http\Controllers\CumulativeReportController;
 use App\Http\Controllers\StudentCumulativeReportController;
+use App\Http\Controllers\SubjectRankingController;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -61,8 +63,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get(
         '/admin/broadsheets/{record}/download',
         [App\Http\Controllers\BroadsheetController::class, 'downloadPdf']
-    )
-        ->name('broadcast.download');
+    )->name('broadcast.download');
+
+    Route::get(
+        '/admin/broadsheets/{record}/download-csv',
+        [App\Http\Controllers\BroadsheetController::class, 'downloadCsv']
+    )->name('broadcast.download.csv');
+
+
     Route::post('/admin/result-uploads/manual-save', [ResultUploadController::class, 'saveManualEntry'])
         ->name('filament.admin.resources.result-uploads.manual-save');
 
@@ -86,6 +94,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hos-remark/{studentId}/{resultRootId}', [\App\Http\Controllers\HOSRemarkController::class, 'getRemark'])
         ->name('hos-remark.get');
 });
+
+
+Route::get('/subject-ranking/select', [SubjectRankingController::class, 'select'])
+    ->name('subject-ranking.select');
+
+Route::get('/subject-ranking/classes', [SubjectRankingController::class, 'getClasses'])
+    ->name('subject-ranking.classes');
+
+Route::get('/subject-ranking/subjects', [SubjectRankingController::class, 'getSubjects'])
+    ->name('subject-ranking.subjects');
+
+Route::get('/subject-ranking/show', [SubjectRankingController::class, 'show'])
+    ->name('subject-ranking.show');
+
+Route::get('/subject-ranking/download-pdf', [SubjectRankingController::class, 'downloadPdf'])
+    ->name('subject-ranking.download.pdf');
+
+Route::get('/subject-ranking/download-csv', [SubjectRankingController::class, 'downloadCsv'])
+    ->name('subject-ranking.download.csv');
 
 Route::get('/report-cards/{record}', [ReportCardController::class, 'show'])
     ->name('report-cards.show');

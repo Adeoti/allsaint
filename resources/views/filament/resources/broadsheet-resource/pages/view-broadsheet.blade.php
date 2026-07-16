@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,12 @@
             body * {
                 visibility: hidden;
             }
-            
+
             #printableArea,
             #printableArea * {
                 visibility: visible;
             }
-            
+
             #printableArea {
                 position: absolute;
                 left: 0;
@@ -25,39 +26,42 @@
                 margin: 0;
                 padding: 0;
             }
-            
-            button, a, .no-print {
+
+            button,
+            a,
+            .no-print {
                 display: none !important;
             }
-            
+
             @page {
                 margin: 0.5in;
                 size: A4 landscape;
             }
-            
+
             table {
                 page-break-inside: auto;
             }
-            
+
             tr {
                 page-break-inside: avoid;
                 page-break-after: auto;
             }
         }
-        
+
         table {
             border-collapse: collapse;
             width: 100%;
             font-size: 0.875rem;
         }
-        
-        th, td {
+
+        th,
+        td {
             border: 1px solid #d1d5db;
             padding: 8px 4px;
             text-align: center;
             vertical-align: middle;
         }
-        
+
         th {
             background-color: #f3f4f6;
             font-weight: 600;
@@ -66,35 +70,36 @@
             top: 0;
             z-index: 20;
         }
-        
+
         .subject-header {
-            min-width: 60px; /* Reduced from 100px */
+            min-width: 60px;
+            /* Reduced from 100px */
             max-width: 80px;
             background-color: #e5e7eb;
             position: relative;
         }
-        
+
         .sticky-left {
             position: sticky;
             left: 0;
             background: white;
             z-index: 10;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
         }
-        
+
         .sticky-serial {
             position: sticky;
             left: 0;
             background: #f9fafb;
             z-index: 11;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
         }
-        
+
         .header-gradient {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             border-bottom: 3px solid #dc2626;
         }
-        
+
         .performance-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -103,25 +108,48 @@
             font-weight: 600;
             margin-left: 4px;
         }
-        
-        .grade-a { background-color: #dcfce7; color: #166534; }
-        .grade-b { background-color: #dbeafe; color: #1e40af; }
-        .grade-c { background-color: #fef3c7; color: #92400e; }
-        .grade-d { background-color: #fef9c3; color: #854d0e; }
-        .grade-e { background-color: #fee2e2; color: #991b1b; }
-        .grade-f { background-color: #fca5a5; color: #7f1d1d; }
-        
+
+        .grade-a {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .grade-b {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .grade-c {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .grade-d {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+
+        .grade-e {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .grade-f {
+            background-color: #fca5a5;
+            color: #7f1d1d;
+        }
+
         .hover-row:hover {
             background-color: #f0f9ff;
             transition: background-color 0.2s;
         }
-        
+
         .summary-highlight {
             background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
             color: white;
             font-weight: 600;
         }
-        
+
         .watermark {
             position: fixed;
             top: 50%;
@@ -134,32 +162,32 @@
             pointer-events: none;
             z-index: 0;
         }
-        
+
         .scroll-container {
             max-height: 70vh;
             overflow-y: auto;
             overflow-x: auto;
         }
-        
+
         .signature-line {
             border-bottom: 1px solid #374151;
             width: 100%;
             margin-bottom: 4px;
         }
-        
+
         .stat-card {
             background: white;
             border-radius: 8px;
             padding: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             border-left: 4px solid #dc2626;
         }
-        
+
         .subject-tooltip {
             position: relative;
             cursor: help;
         }
-        
+
         .subject-tooltip:hover::after {
             content: attr(data-fullname);
             position: absolute;
@@ -174,9 +202,9 @@
             white-space: nowrap;
             z-index: 100;
             margin-bottom: 5px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         .subject-tooltip:hover::before {
             content: '';
             position: absolute;
@@ -190,10 +218,11 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 p-4">
     <!-- Watermark -->
     <div class="watermark no-print">{{ $schoolDetails['school_name'] ?? 'SCHOOL' }}</div>
-    
+
     <div class="max-w-7xl mx-auto">
         <!-- Print and Download Buttons -->
         <div class="mb-6 flex gap-4 no-print">
@@ -202,15 +231,15 @@
                 <i class="fas fa-print mr-2"></i>
                 Print Broadsheet
             </button>
-            
-            {{-- <button onclick="exportToExcel()"
+
+            <a href="{{ route('broadcast.download.csv', $record) }}" target="_blank"
                 class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-600 disabled:opacity-25 transition">
-                <i class="fas fa-file-excel mr-2"></i>
-                Export Excel
-            </button> --}}
-            
+                <i class="fas fa-file-csv mr-2"></i>
+                Export CSV
+            </a>
+
             <div class="flex-1"></div>
-            
+
             <a href="{{ url('/admin/broadsheets') }}"
                 class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-500 focus:outline-none focus:border-gray-700 focus:ring focus:ring-gray-200 active:bg-gray-600 disabled:opacity-25 transition">
                 <i class="fas fa-arrow-left mr-2"></i>
@@ -231,9 +260,10 @@
                         $classAverage = 0;
                         if (!empty($broadsheetData['students'])) {
                             $classTotal = array_sum(array_column($broadsheetData['students'], 'total'));
-                            $classAverage = count($broadsheetData['students']) > 0 
-                                ? round($classTotal / count($broadsheetData['students']), 2) 
-                                : 0;
+                            $classAverage =
+                                count($broadsheetData['students']) > 0
+                                    ? round($classTotal / count($broadsheetData['students']), 2)
+                                    : 0;
                         }
                     @endphp
                     {{ $classAverage }}%
@@ -257,39 +287,45 @@
                     <!-- Logo on Left -->
                     <div class="w-1/6 flex justify-start items-start">
                         @if (isset($schoolDetails['school_logo']) && $schoolDetails['school_logo'])
-                            <img src="{{ Storage::url($schoolDetails['school_logo']) }}" 
-                                 alt="School Logo" 
-                                 class="h-20 w-20 object-contain">
+                            <img src="{{ Storage::url($schoolDetails['school_logo']) }}" alt="School Logo"
+                                class="h-20 w-20 object-contain">
                         @else
-                            <div class="h-20 w-20 bg-red-100 rounded-full flex items-center justify-center border-2 border-red-200">
+                            <div
+                                class="h-20 w-20 bg-red-100 rounded-full flex items-center justify-center border-2 border-red-200">
                                 <i class="fas fa-school text-3xl text-red-400"></i>
                             </div>
                         @endif
                     </div>
-                    
+
                     <!-- Centered School Details -->
                     <div class="w-4/6 text-center">
-                        <h1 class="text-3xl font-bold text-red-700 mb-1">{{ $schoolDetails['school_name'] ?? 'School Name' }}</h1>
-                        <div class="text-gray-600 mb-1">{{ $schoolDetails['school_address'] ?? 'School Address' }}</div>
-                        <div class="text-gray-600 mb-3">{{ $schoolDetails['school_phone'] ?? 'Phone: N/A' }} | {{ $schoolDetails['school_email'] ?? 'Email: info@'.config('app.url') }}</div>
-                        
+                        <h1 class="text-3xl font-bold text-red-700 mb-1">
+                            {{ $schoolDetails['school_name'] ?? 'School Name' }}</h1>
+                        <div class="text-gray-600 mb-1">{{ $schoolDetails['school_address'] ?? 'School Address' }}
+                        </div>
+                        <div class="text-gray-600 mb-3">{{ $schoolDetails['school_phone'] ?? 'Phone: N/A' }} |
+                            {{ $schoolDetails['school_email'] ?? 'Email: info@' . config('app.url') }}</div>
+
                         <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ $record->name }}</h2>
-                        
+
                         <div class="flex justify-center items-center gap-6 text-sm text-gray-700">
-                            <div><i class="fas fa-graduation-cap mr-1"></i> Class: {{ $classInfo->name ?? 'N/A' }}</div>
+                            <div><i class="fas fa-graduation-cap mr-1"></i> Class: {{ $classInfo->name ?? 'N/A' }}
+                            </div>
                             <div><i class="fas fa-calendar-alt mr-1"></i> Term: {{ $record->term ?? 'N/A' }}</div>
                             {{-- <div><i class="fas fa-clock mr-1"></i> Session: {{ $record->session ?? 'N/A' }}</div> --}}
-                            <div><i class="fas fa-users mr-1"></i> Students: {{ $broadsheetData['total_students'] ?? 0 }}</div>
+                            <div><i class="fas fa-users mr-1"></i> Students:
+                                {{ $broadsheetData['total_students'] ?? 0 }}</div>
                         </div>
                     </div>
-                    
+
                     <!-- Empty right column for balance -->
                     <div class="w-1/6"></div>
                 </div>
-                
+
                 <div class="mt-4 text-center text-sm text-gray-600">
                     <i class="fas fa-info-circle mr-1"></i>
-                    Generated on {{ \Carbon\Carbon::parse($broadsheetData['generated_at'] ?? now())->format('F j, Y \a\t h:i A') }}
+                    Generated on
+                    {{ \Carbon\Carbon::parse($broadsheetData['generated_at'] ?? now())->format('F j, Y \a\t h:i A') }}
                 </div>
             </div>
 
@@ -307,27 +343,31 @@
                             {{-- <th class="bg-gray-100" style="min-width: 80px;">
                                 Roll No.
                             </th> --}}
-                            
+
                             @foreach ($broadsheetData['subjects'] ?? [] as $subjectId => $subjectName)
                                 @php
-                                  
-                                    
-                                    $subjectAbbr =  abbreviate($subjectName);
+
+                                    $subjectAbbr = abbreviate($subjectName);
                                 @endphp
-                                <th class="subject-header subject-tooltip" data-fullname="{{ $subjectName }}" title="{{ $subjectName }}">
+                                <th class="subject-header subject-tooltip" data-fullname="{{ $subjectName }}"
+                                    title="{{ $subjectName }}">
                                     <div class="font-bold text-sm">{{ $subjectAbbr }}</div>
-                                    <div class="text-xs text-gray-600 font-normal"><span title="Score">Sc</span> | <span title="Grade">Gr</span></div>
+                                    <div class="text-xs text-gray-600 font-normal"><span title="Score">Sc</span> |
+                                        <span title="Grade">Gr</span>
+                                    </div>
                                 </th>
                             @endforeach
-                            
+
                             <th class="bg-gray-200" style="min-width: 70px;">
                                 <div class="font-bold text-sm">TOTAL</div>
                                 <div class="text-xs text-gray-600 font-normal">
                                     @php
-                                        $totalScore = ($broadsheetData['total_subject_score'] ?? 100) * count($broadsheetData['subjects'] ?? []);
+                                        $totalScore =
+                                            ($broadsheetData['total_subject_score'] ?? 100) *
+                                            count($broadsheetData['subjects'] ?? []);
                                         // Format large numbers with K for thousands
                                         if ($totalScore >= 1000) {
-                                            echo round($totalScore/1000, 1) . 'K';
+                                            echo round($totalScore / 1000, 1) . 'K';
                                         } else {
                                             echo $totalScore;
                                         }
@@ -357,49 +397,59 @@
                                 {{-- <td class="font-mono text-sm">
                                     {{ $student['roll_number'] }}
                                 </td> --}}
-                                
+
                                 @foreach ($broadsheetData['subjects'] ?? [] as $subjectId => $subjectName)
                                     <td>
                                         @php
                                             $subjectScore = $student['subjects'][$subjectId]['score'] ?? 0;
                                             $subjectGrade = $student['subjects'][$subjectId]['grade'] ?? 'N/A';
                                             $gradeClass = '';
-                                            if (strtoupper($subjectGrade) == 'A') $gradeClass = 'grade-a';
-                                            elseif (strtoupper($subjectGrade) == 'B') $gradeClass = 'grade-b';
-                                            elseif (strtoupper($subjectGrade) == 'C') $gradeClass = 'grade-c';
-                                            elseif (strtoupper($subjectGrade) == 'D') $gradeClass = 'grade-d';
-                                            elseif (strtoupper($subjectGrade) == 'E') $gradeClass = 'grade-e';
-                                            elseif (strtoupper($subjectGrade) == 'F') $gradeClass = 'grade-f';
+                                            if (strtoupper($subjectGrade) == 'A') {
+                                                $gradeClass = 'grade-a';
+                                            } elseif (strtoupper($subjectGrade) == 'B') {
+                                                $gradeClass = 'grade-b';
+                                            } elseif (strtoupper($subjectGrade) == 'C') {
+                                                $gradeClass = 'grade-c';
+                                            } elseif (strtoupper($subjectGrade) == 'D') {
+                                                $gradeClass = 'grade-d';
+                                            } elseif (strtoupper($subjectGrade) == 'E') {
+                                                $gradeClass = 'grade-e';
+                                            } elseif (strtoupper($subjectGrade) == 'F') {
+                                                $gradeClass = 'grade-f';
+                                            }
                                         @endphp
                                         <div class="flex flex-col items-center">
                                             <span class="font-bold">{{ $subjectScore }}</span>
-                                            <span class="performance-badge {{ $gradeClass }} text-xs">{{ $subjectGrade }}</span>
+                                            <span
+                                                class="performance-badge {{ $gradeClass }} text-xs">{{ $subjectGrade }}</span>
                                         </div>
                                     </td>
                                 @endforeach
-                                
+
                                 <td class="font-bold bg-gray-50">
                                     {{ $student['total'] }}
                                 </td>
-                                <td class="font-bold {{ $student['average'] >= 50 ? 'text-green-600' : 'text-red-600' }}">
+                                <td
+                                    class="font-bold {{ $student['average'] >= 50 ? 'text-green-600' : 'text-red-600' }}">
                                     {{ $student['average'] ?? 'N/A' }}
                                 </td>
                                 <td class="font-extrabold text-blue-700">
                                     {{ $student['position'] }}
                                 </td>
-                                <td class="text-sm {{ $student['average'] >= 70 ? 'text-green-700' : ($student['average'] >= 50 ? 'text-yellow-700' : 'text-red-700') }}">
+                                <td
+                                    class="text-sm {{ $student['average'] >= 70 ? 'text-green-700' : ($student['average'] >= 50 ? 'text-yellow-700' : 'text-red-700') }}">
                                     {{ $student['average'] >= 70 ? 'Excellent' : ($student['average'] >= 50 ? 'Good' : 'Improve') }}
                                 </td>
                             </tr>
                         @endforeach
-                        
+
                         <!-- Summary Row -->
                         @if (!empty($broadsheetData['students']))
                             @php
                                 $subjectAverages = [];
                                 $subjectHighest = [];
                                 $subjectLowest = [];
-                                
+
                                 foreach ($broadsheetData['subjects'] ?? [] as $subjectId => $subjectName) {
                                     $subjectScores = [];
                                     foreach ($broadsheetData['students'] as $student) {
@@ -407,17 +457,19 @@
                                             $subjectScores[] = $student['subjects'][$subjectId]['score'];
                                         }
                                     }
-                                    $subjectAverages[$subjectId] = count($subjectScores) > 0 
-                                        ? round(array_sum($subjectScores) / count($subjectScores), 1) 
-                                        : 0;
+                                    $subjectAverages[$subjectId] =
+                                        count($subjectScores) > 0
+                                            ? round(array_sum($subjectScores) / count($subjectScores), 1)
+                                            : 0;
                                     $subjectHighest[$subjectId] = count($subjectScores) > 0 ? max($subjectScores) : 0;
                                     $subjectLowest[$subjectId] = count($subjectScores) > 0 ? min($subjectScores) : 0;
                                 }
-                                
+
                                 $classTotal = array_sum(array_column($broadsheetData['students'], 'total'));
-                                $classAverage = count($broadsheetData['students']) > 0 
-                                    ? round($classTotal / count($broadsheetData['students']), 1) 
-                                    : 0;
+                                $classAverage =
+                                    count($broadsheetData['students']) > 0
+                                        ? round($classTotal / count($broadsheetData['students']), 1)
+                                        : 0;
                                 $highestTotal = max(array_column($broadsheetData['students'], 'total'));
                                 $lowestTotal = min(array_column($broadsheetData['students'], 'total'));
                             @endphp
@@ -425,14 +477,15 @@
                                 <td colspan="2" class="font-bold text-left pl-4">
                                     CLASS SUMMARY
                                 </td>
-                                
+
                                 @foreach ($broadsheetData['subjects'] ?? [] as $subjectId => $subjectName)
                                     <td>
                                         <div class="text-sm">{{ $subjectAverages[$subjectId] ?? 0 }}</div>
-                                        <div class="text-xs opacity-90">H:{{ $subjectHighest[$subjectId] ?? 0 }} L:{{ $subjectLowest[$subjectId] ?? 0 }}</div>
+                                        <div class="text-xs opacity-90">H:{{ $subjectHighest[$subjectId] ?? 0 }}
+                                            L:{{ $subjectLowest[$subjectId] ?? 0 }}</div>
                                     </td>
                                 @endforeach
-                                
+
                                 <td>
                                     <div class="text-sm">{{ $classTotal }}</div>
                                     <div class="text-xs opacity-90">H:{{ $highestTotal }} L:{{ $lowestTotal }}</div>
@@ -464,12 +517,13 @@
                             @endphp
                             <div class="flex items-center bg-gray-50 p-2 rounded border">
                                 <span class="font-bold text-blue-700 mr-2 min-w-12">{{ $subjectAbbr }}</span>
-                                <span class="text-sm text-gray-700 truncate" title="{{ $subjectName }}">{{ $subjectName }}</span>
+                                <span class="text-sm text-gray-700 truncate"
+                                    title="{{ $subjectName }}">{{ $subjectName }}</span>
                             </div>
                         @endforeach
                     </div>
                 </div>
-                
+
                 <!-- Performance Distribution -->
                 <div class="mb-8">
                     <h4 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
@@ -488,36 +542,36 @@
                                 }
                             }
                             $totalGrades = array_sum($gradeDistribution);
-                            
+
                             // Calculate percentages and ensure they sum to exactly 100%
                             $percentages = [];
                             $remainingPercentage = 100;
                             $remainingGrades = count($gradeDistribution);
-                            
+
                             // First pass: calculate raw percentages
                             foreach ($gradeDistribution as $grade => $count) {
                                 $percentage = $totalGrades > 0 ? ($count / $totalGrades) * 100 : 0;
                                 $percentages[$grade] = $percentage;
                             }
-                            
+
                             // Second pass: round and adjust to ensure sum is exactly 100%
                             $roundedPercentages = [];
                             $roundedSum = 0;
-                            
+
                             // Round each percentage to 1 decimal place
                             foreach ($percentages as $grade => $percentage) {
                                 $rounded = round($percentage, 1);
                                 $roundedPercentages[$grade] = $rounded;
                                 $roundedSum += $rounded;
                             }
-                            
+
                             // Adjust if sum is not 100%
                             if ($roundedSum != 100) {
                                 $difference = 100 - $roundedSum;
                                 // Find the grade with the largest fractional part to adjust
                                 $largestFractionGrade = '';
                                 $largestFraction = -1;
-                                
+
                                 foreach ($percentages as $grade => $percentage) {
                                     $fraction = $percentage - floor($percentage);
                                     if ($fraction > $largestFraction) {
@@ -525,15 +579,15 @@
                                         $largestFractionGrade = $grade;
                                     }
                                 }
-                                
+
                                 // Adjust the grade with the largest fractional part
                                 if ($largestFractionGrade) {
                                     $roundedPercentages[$largestFractionGrade] += $difference;
                                 }
                             }
                         @endphp
-                        
-                        @foreach($gradeDistribution as $grade => $count)
+
+                        @foreach ($gradeDistribution as $grade => $count)
                             @php
                                 $percentage = $roundedPercentages[$grade] ?? 0;
                                 $gradeColor = [
@@ -542,7 +596,7 @@
                                     'C' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
                                     'D' => 'bg-orange-100 text-orange-800 border-orange-300',
                                     'E' => 'bg-red-100 text-red-800 border-red-300',
-                                    'F' => 'bg-red-200 text-red-900 border-red-400'
+                                    'F' => 'bg-red-200 text-red-900 border-red-400',
                                 ][$grade];
                             @endphp
                             <div class="border rounded-lg p-3 {{ $gradeColor }}">
@@ -552,11 +606,16 @@
                                 </div>
                                 <div class="mt-2">
                                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="h-full {{ str_contains($gradeColor, 'green') ? 'bg-green-500' : 
-                                                              (str_contains($gradeColor, 'blue') ? 'bg-blue-500' : 
-                                                              (str_contains($gradeColor, 'yellow') ? 'bg-yellow-500' : 
-                                                              (str_contains($gradeColor, 'orange') ? 'bg-orange-500' : 'bg-red-500'))) }}" 
-                                             style="width: {{ $percentage }}%"></div>
+                                        <div class="h-full {{ str_contains($gradeColor, 'green')
+                                            ? 'bg-green-500'
+                                            : (str_contains($gradeColor, 'blue')
+                                                ? 'bg-blue-500'
+                                                : (str_contains($gradeColor, 'yellow')
+                                                    ? 'bg-yellow-500'
+                                                    : (str_contains($gradeColor, 'orange')
+                                                        ? 'bg-orange-500'
+                                                        : 'bg-red-500'))) }}"
+                                            style="width: {{ $percentage }}%"></div>
                                     </div>
                                     <div class="text-xs mt-1">{{ number_format($percentage, 1) }}%</div>
                                 </div>
@@ -564,7 +623,7 @@
                         @endforeach
                     </div>
                 </div>
-                
+
                 <!-- Statistics and Signatures -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div>
@@ -594,19 +653,23 @@
                                 @php
                                     $passCount = 0;
                                     foreach ($broadsheetData['students'] ?? [] as $student) {
-                                        if ($student['average'] >= 40) $passCount++;
+                                        if ($student['average'] >= 40) {
+                                            $passCount++;
+                                        }
                                     }
-                                    $passRate = count($broadsheetData['students'] ?? []) > 0 
-                                        ? round(($passCount / count($broadsheetData['students'])) * 100, 1) 
-                                        : 0;
+                                    $passRate =
+                                        count($broadsheetData['students'] ?? []) > 0
+                                            ? round(($passCount / count($broadsheetData['students'])) * 100, 1)
+                                            : 0;
                                 @endphp
-                                <span class="font-bold {{ $passRate >= 70 ? 'text-green-600' : ($passRate >= 50 ? 'text-yellow-600' : 'text-red-600') }}">
+                                <span
+                                    class="font-bold {{ $passRate >= 70 ? 'text-green-600' : ($passRate >= 50 ? 'text-yellow-600' : 'text-red-600') }}">
                                     {{ $passRate }}%
                                 </span>
                             </li>
                         </ul>
                     </div>
-                    
+
                     <div>
                         <h4 class="font-bold text-lg text-gray-800 mb-3 flex items-center">
                             <i class="fas fa-key mr-2 text-purple-600"></i>
@@ -639,26 +702,30 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
-                
+
                 <!-- Footer Note -->
                 <div class="mt-8 text-center text-sm text-gray-500 border-t border-gray-200 pt-4">
                     <div class="flex flex-wrap justify-center items-center gap-4 mb-2">
-                        <span><i class="fas fa-phone-alt mr-1"></i> {{ $schoolDetails['school_phone'] ?? 'Phone: N/A' }}</span>
+                        <span><i class="fas fa-phone-alt mr-1"></i>
+                            {{ $schoolDetails['school_phone'] ?? 'Phone: N/A' }}</span>
                         <span>•</span>
-                        <span><i class="fas fa-envelope mr-1"></i> {{ $schoolDetails['school_email'] ?? 'Email: info@'.config('app.url') }}</span>
-                        @if(isset($schoolDetails['school_website']) && $schoolDetails['school_website'])
+                        <span><i class="fas fa-envelope mr-1"></i>
+                            {{ $schoolDetails['school_email'] ?? 'Email: info@' . config('app.url') }}</span>
+                        @if (isset($schoolDetails['school_website']) && $schoolDetails['school_website'])
                             <span>•</span>
-                            <span><i class="fas fa-globe mr-1"></i> {{ $schoolDetails['school_website'] ?? 'Website: '.config('app.url') }}</span>
+                            <span><i class="fas fa-globe mr-1"></i>
+                                {{ $schoolDetails['school_website'] ?? 'Website: ' . config('app.url') }}</span>
                         @else
                             <span>•</span>
                             <span><i class="fas fa-globe mr-1"></i> Website: {{ config('app.url') }}</span>
                         @endif
                     </div>
                     <p class="text-xs italic">Computer generated document • Official copy available on request</p>
-                    <p class="mt-2 text-xs font-medium">Generated by Paramount Edusoft • {{ date('F j, Y \a\t h:i A') }}</p>
+                    <p class="mt-2 text-xs font-medium">Generated by Paramount Edusoft •
+                        {{ date('F j, Y \a\t h:i A') }}</p>
                 </div>
             </div>
         </div>
@@ -668,21 +735,7 @@
         function printBroadsheet() {
             window.print();
         }
-        
-        function exportToExcel() {
-            const table = document.querySelector('table');
-            const html = table.outerHTML;
-            const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'broadsheet-{{ $record->name }}-{{ date("Y-m-d") }}.xls';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-        
+
         // Add hover effects for rows
         document.addEventListener('DOMContentLoaded', function() {
             const rows = document.querySelectorAll('tbody tr');
@@ -696,7 +749,7 @@
                     }
                 });
             });
-            
+
             // Add tooltips for subject headers
             const subjectHeaders = document.querySelectorAll('.subject-tooltip');
             subjectHeaders.forEach(header => {
@@ -707,4 +760,5 @@
         });
     </script>
 </body>
+
 </html>

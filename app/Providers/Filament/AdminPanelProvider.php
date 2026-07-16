@@ -66,6 +66,12 @@ class AdminPanelProvider extends PanelProvider
                     ->url(fn() => route('cumulative-reports.select'))  
                     ->sort(1)
                     ->isActiveWhen(fn(): bool => request()->routeIs('cumulative-reports.select')),
+                NavigationItem::make('Subject Rankings')
+                    ->icon('heroicon-o-chart-bar')
+                    ->group('Examinations')
+                    ->url(fn() => route('subject-ranking.select'))  
+                    ->sort(2)
+                    ->isActiveWhen(fn(): bool => request()->routeIs('subject-ranking.select')),
             ])
             ->middleware([
                 EncryptCookies::class,
